@@ -11,6 +11,7 @@ import helpers from '../../utils/helpers.js'
 export default function CurrentConditions() {
 
   let addressInputElement = useRef(document.createElement('input'))
+  let numDaysInputElement = useRef(document.createElement('input'))
 
   // let [sr, ssr ] = useState<definition | undefined>(undefined)
 
@@ -78,6 +79,23 @@ export default function CurrentConditions() {
   function addressFocusHandler() {
     setErrorMsg('')
     setAddress('')
+  }
+
+  async function numDaysInputHandler(event:any) {
+    event.preventDefault()
+    const numDaysInput = +numDaysInputElement.current.value.trim() || 7
+    try {
+      let response = await fetchWeatherData(address,numDaysInput)
+      let days = await response.getExtended(numDaysInput)
+      response.forecast = days
+      await setWeatherData(response)
+      setActiveForecast('extended')
+      numDaysInputElement.current.value = ''
+    }
+    catch(err) {
+      console.error(err)
+      numDaysInputElement.current.value = ''
+    }
   } 
 
   async function addressHandler(event:any) {
@@ -126,6 +144,20 @@ export default function CurrentConditions() {
           <Grid columns={3} breakpoints={{ 482: 1 }}>
             <div><button onClick={showHourlyHandler}>Show Hourly</button></div>
             <div><button onClick={showSevenDayHandler}>Show Seven Day</button></div>
+
+
+            <form id="showNumDaysForm" className="">
+              <div className="columns two-columns">
+                <div className="column right-justify">
+                  <input type="text" placeholder='enter number of days' ref={numDaysInputElement}/>
+                </div>
+                <div className="column left-justify">
+                  <button type="submit" onClick={numDaysInputHandler}>Show Extended Forecast</button>
+                </div>
+              </div>
+            </form>
+
+
             <div><button onClick={refreshHandler}>Refresh</button></div>
           </Grid>
           </>

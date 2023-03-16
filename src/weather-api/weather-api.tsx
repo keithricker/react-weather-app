@@ -55,6 +55,15 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
     },
     forecast: forecast,
     sevenDay: forecast,
+    async getExtended(numberOfDays:number): Promise<Extended> {
+      let filteredForecast:Extended = {}
+      let filteredKeys = Object.keys(this.sevenDay)
+      filteredKeys.splice(numberOfDays+1)
+      filteredKeys.forEach(key => {
+        filteredForecast[key] = this.sevenDay[key]
+      })
+      return filteredForecast
+    },  
     async getHourly(): Promise<Period[]> { 
       let fetchedHourly = await fetchJson(grid.properties.forecastHourly)
       return fetchedHourly.properties.periods

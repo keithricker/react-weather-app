@@ -59,6 +59,7 @@ interface WeatherDataStructure {
   county: County
   getCurrentConditions(): Promise<Period>;
   getHourly(): Promise<Period[]>;
+  getExtended(numberOfDays:number): Promise<Extended>;
   getCounty(): Promise<County>;
   getNearestMetro(): Promise<City>;
 }
@@ -68,6 +69,7 @@ type WeatherDataObject = {
   sevenDay: Extended
   getCurrentConditions(): Promise<Period>;
   getHourly(): Promise<Period[]>;
+  getExtended(numberOfDays:number): Promise<Extended>;
   getCounty(): Promise<County>;
   cache: Cached;
   [key?:string]: any
