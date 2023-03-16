@@ -1,0 +1,1 @@
+export declare function responsive(Component:Function, sizes:GenericObject): Function;
