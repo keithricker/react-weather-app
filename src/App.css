@@ -249,22 +249,38 @@ ul {
   margin:0;
   padding:0;
   text-align:left;
+  height:0px;
+  width:0px;
   & img {
-    max-height: 50px;
+    min-height: 50px;
     margin-top: 4px;
   }
 }
 
 .featured .weather-icon img {
+    /*
     filter: invert(1);
     -moz-filter:    grayscale(0%);
     -ms-filter:     grayscale(0%);
     -o-filter:      grayscale(0%);
+    */
+    position:relative;
+    width: 90px;
+    height: 90px;
+    max-heigh:90px;
+    top: -20px;
+    left: -15px;
+}
+
+.screenXSmall .featured .weather-icon img {
+  top: -30px
 }
 
 .gridBlock .weather-icon img {
-  max-height:36px;
-  margin-top:3px;
+  height: 64px;
+  position: relative;
+  top:-13px;
+  left:-14px;
 }
 
 .conditions-temp {
