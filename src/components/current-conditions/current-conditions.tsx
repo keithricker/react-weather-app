@@ -5,8 +5,9 @@ import Summary from '../weather-summary/weather-summary'
 import Hourly from '../hourly-forecast'
 import Extended from '../extended-forecast'
 import DefaultForecast from '../default-forecast'
-import { getWeatherDataFromAddress, getWeatherAutomatic } from '../../weather-api/weather-api'
+import { getWeatherDataFromAddress, getWeatherAutomatic, getDefaultWeather } from '../../weather-api/weather-api'
 import helpers from '../../utils/helpers.js'
+import responsive from '../responsive/responsive'
 
 export default function CurrentConditions() {
 
@@ -18,18 +19,25 @@ export default function CurrentConditions() {
   let [ weatherData, _setWeatherData ] = useState<WeatherDataObject|GenericObject>({})
   let [ activeForecast, setActiveForecast ] = useState('default')
   let [ address, setAddress ] = useState('')
-  let [ errorMsg, setErrorMsg ] = useState('')
+  let errorMsg = useRef(document.createElement('div'))
+  let setErrorMsg = (val:string) => errorMsg.current.innerText=val
 
-  async function fetchWeatherData(_address:string=address,results?:number):Promise<WeatherDataObject> {
+  async function fetchWeatherData(_address:string=address):Promise<WeatherDataObject> {
     console.log('fetching weather data for '+_address)
     try {
-      let _weatherData: any
+      let _weatherData:any
       if (!weatherData.forecast && !_address) {
         _weatherData = await getWeatherAutomatic()
       } else if (_address) { 
         _weatherData = await getWeatherDataFromAddress(_address)
       } else if (weatherData.forecast) {
         _weatherData = weatherData
+      }
+      if (activeForecast === 'default' || !_weatherData.defaultWeather) {
+        let defaultWeather = await getDefaultWeather()
+        if (defaultWeather) {
+          _weatherData.defaultWeather = defaultWeather
+        }
       }
       return _weatherData
     }
@@ -78,14 +86,15 @@ export default function CurrentConditions() {
 
   function addressFocusHandler() {
     setErrorMsg('')
-    setAddress('')
+    addressInputElement.current.value = ''
+    // setAddress('')
   }
 
-  async function numDaysInputHandler(event:any) {
+  async function numDaysInputHandler(event:React.MouseEvent<HTMLElement>) {
     event.preventDefault()
     const numDaysInput = +numDaysInputElement.current.value.trim() || 7
     try {
-      let response = await fetchWeatherData(address,numDaysInput)
+      let response = await fetchWeatherData(address)
       let days = await response.getExtended(numDaysInput)
       response.forecast = days
       await setWeatherData(response)
@@ -98,12 +107,20 @@ export default function CurrentConditions() {
     }
   } 
 
-  async function addressHandler(event:any) {
+  async function addressHandler(event:React.MouseEvent<HTMLElement>) {
     event.preventDefault()
+    console.log('h3y')
     const addressInput = addressInputElement.current.value.trim()
+    const numDays = numDaysInputElement.current.value.trim()
     if (helpers.validateAddress(addressInput)) {
       try {
-        let response = await fetchWeatherData(addressInput)
+        let response:WeatherDataObject = await fetchWeatherData(addressInput)
+        if (numDays && !isNaN(+numDays)) {
+          numDaysInputElement.current.value = ''
+          let days = await response.getExtended(+numDays)
+          response.forecast = days
+          setActiveForecast('extended')
+        } 
         setAddress(addressInputElement.current.value)
         setWeatherData(response)
         addressInputElement.current.value = ''
@@ -132,7 +149,7 @@ export default function CurrentConditions() {
     <div className="semiLarge">{weatherData.county.name} County</div>
   )
 
-  return (
+  let jsx = () => (
     <>
     <div id="featuredConditions">
 
@@ -176,16 +193,15 @@ export default function CurrentConditions() {
       </form>
 
     </div>
-    { errorMsg && 
-      <div id="error">{errorMsg}</div> 
-    }
+    <div id="error" ref={errorMsg}></div>
     <div id="weatherGrid">
       { activeForecast === 'hourly' && weatherData.hourly && <Hourly periods={weatherData.hourly} attributes={{id: "hourlyConditions", className: "forecast"}} /> }
-      { activeForecast === 'extended' && <Extended forecast={weatherData.forecast} attributes={{id: "ExtendedForecast", className:"forecast"}} /> }
-      { activeForecast === 'default' &&  <DefaultForecast /> }
+      { activeForecast === 'extended' && weatherData.forecast && <Extended forecast={weatherData.forecast} attributes={{id: "ExtendedForecast", className:"forecast"}} /> }
+      { activeForecast === 'default' && weatherData.defaultWeather && <DefaultForecast weatherData={weatherData.defaultWeather} /> }
     </div>
 
     </>
   )
-
+  let WeatherConditions = responsive(jsx,{addClasses:true})
+  return <WeatherConditions />
 }

@@ -24,12 +24,10 @@ form {
 
 #showNumDaysForm {
   & input {
-    width:91%;
-    margin-left:20px;
-    padding-left:20px;
-  }
-  & button {
-    background-color: #8c427f
+    width:90%;
+    margin-left:0px;
+    margin-right:0px;
+    padding-left:10px;
   }
 }
 
@@ -89,12 +87,33 @@ h1.header {
     font-size:14pt
   }
   & .littleBigger {
-    font-size:108%
+    font-size:108%  
   }
   & .responsive.screenXSmall {
     font-size: 90%
   }
 }
+
+.responsive.screenSmall {
+  & .columns .column.left-justify, .columns .column.right-justify {
+    justify-content: center;
+  }
+}
+.responsive.screenMed {
+  & #featuredConditions {
+    & .columns .column.left-justify, .columns .right-justify {
+      justify-content: center;
+    }
+  }
+  & #showNumDaysForm {
+    & input {
+      width: 90%;
+      margin-left:10px;
+      margin-right:10px;
+    }
+  }
+}
+
 
 #weatherGrid {
   background:#aec1e9;
@@ -363,6 +382,11 @@ ul {
   font-size:12pt;
 }
 
-#addressForm .columns.two-columns {
-  min-height:40px;
+#addressForm {
+  & .columns.two-columns {
+    min-height:40px;
+  }
+  & button {
+    background-color:#8c427f
+  }
 }

@@ -1,43 +1,14 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { PropsWithChildren } from 'react'
 import Summary from '../weather-summary/weather-summary'
 import Grid from '../grid'
-import { getWeatherData } from '../../weather-api/weather-api'
 
-export default function DefaultForecast(props:any) {
+interface Props extends PropsWithChildren {
+  weatherData: WeatherDataObject
+}
 
-  interface defaultData {
-    nyc: Period,
-    la: Period,
-    chi: Period
-  }
+export default function DefaultForecast(props:Props) {
 
-  const [ weatherData, setData ] = useState<defaultData|GenericObject>({})
-
-  useEffect(() => {
-
-    let mounted = true;
-
-    async function getData(): Promise<defaultData> {
-      let nyc =  await getWeatherData(40.758896, -73.985130)
-      let la = await getWeatherData(34.0522, -118.2437)
-      let chi = await (getWeatherData(41.881832, -87.623177))
-      let defaultConditions = { 
-        nyc: nyc.forecast.today.day || nyc.forecast.today.evening,
-        la: la.forecast.today.day || la.forecast.today.evening,
-        chi: chi.forecast.today.day || chi.forecast.today.evening
-      }
-      console.log('default conditions',defaultConditions)
-      return defaultConditions
-    }
-
-    getData().then(data => { 
-      if (mounted) {
-        setData(data)
-      }
-    })
-    return () => { mounted = false };
-  }, [])
+  const weatherData = props.weatherData
 
   function Conditions(props:{city:string,conditions:Period}) {
     return (

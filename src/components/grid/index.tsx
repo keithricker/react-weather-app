@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { PropsWithChildren, ReactNode } from 'react'
 import responsive from '../responsive/responsive'
 
-function Grid(props:GenericObject):JSX.Element {
+interface Props extends PropsWithChildren {
+  children: ReactNode[];
+  columns:number
+  currentSize:{name:string,min:number,max:number};
+  breakpoints:{[key:string]: number};
+  properties:GenericObject;
+  className:string
+}
+
+function Grid(props:Props):JSX.Element {
 
   let columns = props.columns || 3
-  let { currentSize, breakpoints, properties={},className='', style='' } = props
+  let { currentSize, breakpoints, properties={}, className='' } = props
 
   if (breakpoints && currentSize 
     && typeof currentSize.max === 'number') {

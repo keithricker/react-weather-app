@@ -1,4 +1,4 @@
 export declare const weatherIcons: {
-  day: any
-  evening: any;
+  day: { [key:string]:string };
+  evening: { [key:string]:string };
 };

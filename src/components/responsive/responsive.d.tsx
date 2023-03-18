@@ -1,1 +1,1 @@
-export declare function responsive(Component:Function, sizes:GenericObject): Function;
+export declare function responsive(Component:Function, sizes:{[key:string]:string}): Function;

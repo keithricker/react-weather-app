@@ -5,14 +5,20 @@ interface Props {
   children: React.ReactNode
 }
 
-let defaultSizes: { [key:string]:number } = {
+interface Sizes { [key:string]:number }
+
+let defaultSizes:Sizes = {
   screenXSmall: 600,
   screenSmall: 768,
   screenMed: 992,
   screenLarge: 1200
 }
 
-export default function responsive(Component:Function,sizes=defaultSizes):Function {
+let defaultOptions:{sizes?:Sizes,addClasses:boolean} = { sizes:defaultSizes, addClasses:false }
+
+export default function responsive(Component:Function,options=defaultOptions):Function {
+
+  let { sizes=defaultSizes, addClasses=false } = options
   return function Responsive(props:Props):JSX.Element {
 
     let currentScreenWidth = window.innerWidth
@@ -73,7 +79,9 @@ export default function responsive(Component:Function,sizes=defaultSizes):Functi
     let breakpoint = {name:sizeName,min:sizeStart,max:sizeEnd}
 
     return (
-      <Component currentSize={breakpoint} {...props} />
+      <div className={addClasses ? "responsive "+sizeName : ''}>
+        <Component currentSize={breakpoint} {...props} />
+      </div>
     )
   }
 }

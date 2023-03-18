@@ -125,12 +125,22 @@ export async function getWeatherDataFromAddress(address: string): Promise<Weathe
   return weatherData
 }
 
+export async function getDefaultWeather() {
+  let nyc =  await getWeatherData(40.758896, -73.985130)
+  let la = await getWeatherData(34.0522, -118.2437)
+  let chi = await (getWeatherData(41.881832, -87.623177))
+  let defaultConditions = { 
+    nyc: nyc.forecast.today.day || nyc.forecast.today.evening,
+    la: la.forecast.today.day || la.forecast.today.evening,
+    chi: chi.forecast.today.day || chi.forecast.today.evening
+  }
+  console.log('default conditions',defaultConditions)
+  return defaultConditions  
+}
+
 export function getWeatherAutomatic() {
-
   return new Promise(resolver => {
-
     navigator.geolocation.getCurrentPosition(async (position) => {      
-
       let theForecast
       if (position && position.coords) {
   
@@ -139,7 +149,6 @@ export function getWeatherAutomatic() {
         theForecast = await getWeatherData(lat,lon)
   
       }
-  
       else {
         let address = '4600 Silver Hill Rd, Washington, DC 20233'
         theForecast = await getWeatherDataFromAddress(address)
@@ -147,5 +156,4 @@ export function getWeatherAutomatic() {
       resolver(theForecast)
     })
   })
-
 }
