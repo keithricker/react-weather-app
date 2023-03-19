@@ -49,12 +49,15 @@ export default function responsive(Component:Function,options=defaultOptions):Fu
         
         if ((newScreenWidth > maxBreakpoint) && (currentScreenWidth > maxBreakpoint)) {
           currentScreenWidth = newScreenWidth
+          return
         }
         currentScreenWidth = newScreenWidth
     
         // only do something if we have a new breakpoint
         let newBreakpoint = findNextBreakpoint(newScreenWidth)
         if (newBreakpoint.value !== nextBreakpoint.value) {
+          console.error('setting state!')
+          console.log({old:nextBreakpoint.value,new:newBreakpoint.value})
           setNextBreakpoint(newBreakpoint)
         }
       }
