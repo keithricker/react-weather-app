@@ -14,7 +14,7 @@ export default function CurrentConditions() {
   let addressInputElement = useRef(document.createElement('input'))
   let numDaysInputElement = useRef(document.createElement('input'))
 
-  // let [sr, ssr ] = useState<definition | undefined>(undefined)
+  // let [sr, ssr ] = useState<definition | undefined | GenericObject>(undefined)
 
   let [ weatherData, _setWeatherData ] = useState<WeatherDataObject|GenericObject>({})
   let [ activeForecast, setActiveForecast ] = useState('default')
