@@ -4,7 +4,7 @@ Weather App Made with React + Typescript
 #### [View the live app + code on codesandbox.](https://codesandbox.io/s/github/keithricker/react-weather-app)
 
 #### Note: This app is for demo purposes.
-<br />
+<br />  
 
 ### Features:
 - Utilizes two API integrations: 
@@ -19,8 +19,7 @@ Weather App Made with React + Typescript
   2. Dynamic adding of classes based on screen size
 - Higher Order Component structure
 - Dynamic use of icons based on weather conditions
-<br />
-<br />
+<br />  
 
 ### Commands:
   "npm run dev": fires up a developer server  
