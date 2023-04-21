@@ -35,7 +35,6 @@ function App(props:PropsWithChildren): JSX.Element {
             <img src={vitelogo} className="logo vite-logo" alt="Vite logo" />
           </a>          
         </div>
-        <h1 className="header">React Demo for Insight2Profit</h1>
       </div>
 
     </div>
