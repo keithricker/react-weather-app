@@ -1,7 +1,7 @@
 # Weather Balloon
 Weather App Made with React + Typescript
 
-[View the live app + code on codesandbox.](https://codesandbox.io/s/github/keithricker/react-weather-app)
+#### [View the live app + code on codesandbox.](https://codesandbox.io/s/github/keithricker/react-weather-app)
 
 #### Note: This app is for demo purposes.
 <br />
