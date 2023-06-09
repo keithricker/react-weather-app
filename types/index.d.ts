@@ -66,7 +66,7 @@ interface WeatherDataStructure {
 
 type WeatherDataObject = {
   forecast: Extended;
-  sevenDay: Extended
+  sevenDay: Extended;
   getCurrentConditions(): Promise<Period>;
   getHourly(): Promise<Period[]>;
   getExtended(numberOfDays:number): Promise<Extended>;
